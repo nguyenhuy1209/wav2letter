@@ -70,9 +70,10 @@ if __name__ == '__main__':
 
         print("Writing to {dst}...".format(dst=dst_list), flush=True)
         filename = os.path.join(src, "prompts.txt")
-        lines = open(filename).readlines()
-        path = os.path.join(src, 'waves')
-        with open(os.path.join(dst_list), 'w') as f:
+        with open(filename, encoding="utf-8") as f:
+            lines = f.readlines()
+        path = os.path.join(src, "waves")
+        with open(os.path.join(dst_list), 'w', encoding="utf-8") as f:
             for line in lines:
                 index = line.find(" ")
                 name, transcript = line[:index], line[index+1:]
@@ -100,8 +101,8 @@ if __name__ == '__main__':
     for ds_type in ['train', 'dev', 'test']:
         current_path = os.path.join(text_path, ds_type + ".txt")
         if not os.path.exists(current_path):
-            with open(os.path.join(lists_path, ds_type + ".lst"), "r") as flist, open(
-                os.path.join(text_path, ds_type + ".txt"), "w"
+            with open(os.path.join(lists_path, ds_type + ".lst"), "r", encoding="utf-8") as flist, open(
+                os.path.join(text_path, ds_type + ".txt"), "w", encoding="utf-8"
             ) as fout:
                 for line in flist:
                     fout.write(" ".join(line.strip().split(" ")[3:]) + "\n")

@@ -70,9 +70,9 @@ if __name__ == "__main__":
     # prepare data
     print("Preparing tokens and lexicon for acoustic model...\n", flush=True)
     word_dict = defaultdict(set)
-    with open(train_all_text, "w") as ftext:
+    with open(train_all_text, "w", encoding="utf-8") as ftext:
         for path in subpaths:
-            with open(os.path.join(lists_path, path + ".lst"), "r") as flist:
+            with open(os.path.join(lists_path, path + ".lst"), "r", encoding="utf-8") as flist:
                 for line in flist:
                     transcription = line.strip().split(" ")[3:]
                     if path == "train":
@@ -95,8 +95,8 @@ if __name__ == "__main__":
     # word piece dictionary
     print("Creating word piece list...\n", flush=True)
     exclude_list = {"<unk>", "<s>", "</s>"}
-    with open(vocab_name.replace(".vocab", ".tokens"), "w") as fvocab_filt:
-        with open(vocab_name, "r", encoding="utf-8") as fvocab:
+    with open(vocab_name.replace(".vocab", ".tokens"), "w", encoding="utf-8") as fvocab_filt:
+        with open(vocab_name, "r", encoding="utf-8", encoding="utf-8") as fvocab:
             for line in fvocab:
                 val, _ = line.strip().split("\t", 1)
                 if val not in exclude_list:
