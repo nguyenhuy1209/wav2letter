@@ -130,50 +130,50 @@ if __name__ == "__main__":
     #         assert re.match("^[a-z']+$", word), "invalid word - {w}".format(w=word)
     #         lm_words.append(word)
 
-    # # word -> word piece lexicon for loading targets
-    # print("Creating word -> word pieces lexicon...\n", flush=True)
-    # sp = spm.SentencePieceProcessor()
-    # sp.Load(model_name)
+    # word -> word piece lexicon for loading targets
+    print("Creating word -> word pieces lexicon...\n", flush=True)
+    sp = spm.SentencePieceProcessor()
+    sp.Load(model_name)
 
-    # for nbest in args.nbest.split(","):
-    #     nbest = int(nbest)
-    #     lexicon_name = "librispeech-train+dev-unigram-{sz}-nbest{n}.lexicon".format(
-    #         sz=num_wordpieces, n=nbest
-    #     )
-    #     lexicon_name_train = "librispeech-train-unigram-{sz}-nbest{n}.lexicon".format(
-    #         sz=num_wordpieces, n=nbest
-    #     )
-    #     with open(os.path.join(am_path, lexicon_name), "w") as f_lexicon, open(
-    #         os.path.join(am_path, lexicon_name_train), "w"
-    #     ) as f_lexicon_train:
-    #         for word in lexicon_words:
-    #             wps = sp.NBestEncodeAsPieces(word, nbest)
-    #             for wp in wps:  # the order matters for our training
-    #                 f_lexicon.write(
-    #                     word
-    #                     + "\t"
-    #                     + " ".join([w.replace("\u2581", "_") for w in wp])
-    #                     + "\n"
-    #                 )
-    #                 if word in lexicon_words_train:
-    #                     f_lexicon_train.write(
-    #                         word
-    #                         + "\t"
-    #                         + " ".join([w.replace("\u2581", "_") for w in wp])
-    #                         + "\n"
-    #                     )
-    #     nbest = int(nbest)
-    #     decoder_lexicon_name = "decoder-unigram-{sz}-nbest{n}.lexicon".format(
-    #         sz=num_wordpieces, n=nbest
-    #     )
-    #     with open(os.path.join(decoder_path, decoder_lexicon_name), "w") as f_lexicon:
-    #         for word in lm_words:
-    #             wps = sp.NBestEncodeAsPieces(word, nbest)
-    #             for wp in wps:  # the order matters for our training
-    #                 f_lexicon.write(
-    #                     word
-    #                     + "\t"
-    #                     + " ".join([w.replace("\u2581", "_") for w in wp])
-    #                     + "\n"
-    #                 )
+    for nbest in args.nbest.split(","):
+        nbest = int(nbest)
+        lexicon_name = "vivos-train+dev-unigram-{sz}-nbest{n}.lexicon".format(
+            sz=num_wordpieces, n=nbest
+        )
+        lexicon_name_train = "vivos-train-unigram-{sz}-nbest{n}.lexicon".format(
+            sz=num_wordpieces, n=nbest
+        )
+        with open(os.path.join(am_path, lexicon_name), "w", encoding="utf-8") as f_lexicon, open(
+            os.path.join(am_path, lexicon_name_train), "w", encoding="utf-8"
+        ) as f_lexicon_train:
+            for word in lexicon_words:
+                wps = sp.NBestEncodeAsPieces(word, nbest)
+                for wp in wps:  # the order matters for our training
+                    f_lexicon.write(
+                        word
+                        + "\t"
+                        + " ".join([w.replace("\u2581", "_") for w in wp])
+                        + "\n"
+                    )
+                    if word in lexicon_words_train:
+                        f_lexicon_train.write(
+                            word
+                            + "\t"
+                            + " ".join([w.replace("\u2581", "_") for w in wp])
+                            + "\n"
+                        )
+        # nbest = int(nbest)
+        # decoder_lexicon_name = "decoder-unigram-{sz}-nbest{n}.lexicon".format(
+        #     sz=num_wordpieces, n=nbest
+        # )
+        # with open(os.path.join(decoder_path, decoder_lexicon_name), "w") as f_lexicon:
+        #     for word in lm_words:
+        #         wps = sp.NBestEncodeAsPieces(word, nbest)
+        #         for wp in wps:  # the order matters for our training
+        #             f_lexicon.write(
+        #                 word
+        #                 + "\t"
+        #                 + " ".join([w.replace("\u2581", "_") for w in wp])
+        #                 + "\n"
+        #             )
     print("Done!", flush=True)
