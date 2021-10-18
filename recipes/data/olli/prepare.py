@@ -32,7 +32,6 @@ if __name__ == '__main__':
     data_path = '/olli_data/thuc_kaldi_format_data/'
     text_path = os.path.join(args.dst, "text")
     lists_path = os.path.join(args.dst, "lists")
-    os.makedirs(audio_path, exist_ok=True)
     os.makedirs(text_path, exist_ok=True)
     os.makedirs(lists_path, exist_ok=True)
     
@@ -48,23 +47,24 @@ if __name__ == '__main__':
             continue
 
         print("Writing to {dst}...".format(dst=dst_list), flush=True)
-        text_file = os.path.join(data_path, "text")
-        path_file = os.path.join(data_path, "wav.scp")
+        text_file = os.path.join(data_path, ds_type, "text")
+        path_file = os.path.join(data_path, ds_type, "wav.scp")
+        path_dict = {}
         with open(text_file, encoding="utf-8") as f:
             text_lines = f.readlines()
         with open(path_file, encoding="utf-8") as f:
-            path_lines = f.readlines()
+            for line in f:
+                utt_id, path = line.split(" ")
+                path_dict[utt_id] = path
         with open(os.path.join(dst_list), 'w', encoding="utf-8") as f:
             for t_line in text_lines:
                 wav_path = None
                 duration = None
-                utt_id_1, transcript = t_line.split(" ")
-                for p_line in path_lines:
-                    utt_id_2, path = p_line.split(" ")
-                    if utt_id_1 == utt_id_2:
-                        wav_path = path
-                        duration = sox.file_info.duration(path) * 1000
-                f.write("{} {} {} {}".format(utt_id_1, wav_path, duration, transcript))
+                index = t_line.find(" ")
+                utt_id, transcript = t_line[:index], t_line[index+1:]
+                wav_path = path_dict[utt_id][:-1]
+                duration = sox.file_info.duration(wav_path) * 1000
+                f.write("{} {} {} {}".format(utt_id, wav_path, duration, transcript))
 
     # Split train set to train+dev set
     train_lst_path = os.path.join(lists_path, 'train' + ".lst")
