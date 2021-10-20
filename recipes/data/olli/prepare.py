@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument(
         "--ndev_utt",
         help="number of validation set utterances",
-        default=760,
+        default=4572,
         type=int,
     )
 

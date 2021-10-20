@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--process", help="# of process for Multiprocessing", default=8, type=int
     )
-    parser.add_argument("--wp", help="number of word pieces", default=3321, type=int)
+    parser.add_argument("--wp", help="number of word pieces", default=10000, type=int)
     parser.add_argument(
         "--nbest",
         help="number of best segmentations for each word (or numbers comma separated)",
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     train_cmd = (
         "--input={input} --model_prefix={prefix} --vocab_size={sz}"
         " --character_coverage=1.0 --model_type=unigram"
-        " --split_by_unicode_script=false".format(
+        " --split_by_unicode_script=false ".format(
             input=train_all_text, prefix=prefix, sz=num_wordpieces
         )
     )
@@ -101,34 +101,6 @@ if __name__ == "__main__":
                 val, _ = line.strip().split("\t", 1)
                 if val not in exclude_list:
                     fvocab_filt.write(val.replace("\u2581", "_") + "\n")
-
-    # # Generating decoder/*
-    # lm = "4-gram"
-    # print("Downloading Librispeech official LM model...\n", flush=True)
-    # arpa_file = os.path.join(decoder_path, lm + ".arpa")
-    # if not os.path.exists(arpa_file):
-    #     os.system(
-    #         "wget -c -O - http://www.openslr.org/resources/11/{lm}.arpa.gz | "
-    #         "gunzip -c > {fout}".format(lm=lm, fout=arpa_file)
-    #     )
-    # else:
-    #     print("Arpa file {} exist, skip its downloading.".format(arpa_file))
-    # # temporary arpa file in lowercase
-    # os.system(
-    #     "cat {arpa} | tr '[:upper:]' '[:lower:]' > {arpa}.lower".format(arpa=arpa_file)
-    # )
-    # lm_words = []
-    # with open(arpa_file + ".lower", "r") as arpa:
-    #     for line in arpa:
-    #         # verify if the line corresponds to unigram
-    #         if not re.match(r"[-]*[0-9\.]+\t\S+\t*[-]*[0-9\.]*$", line):
-    #             continue
-    #         word = line.split("\t")[1]
-    #         word = word.strip().lower()
-    #         if word == "<unk>" or word == "<s>" or word == "</s>":
-    #             continue
-    #         assert re.match("^[a-z']+$", word), "invalid word - {w}".format(w=word)
-    #         lm_words.append(word)
 
     # word -> word piece lexicon for loading targets
     print("Creating word -> word pieces lexicon...\n", flush=True)
