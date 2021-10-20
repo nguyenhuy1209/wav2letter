@@ -7,7 +7,7 @@ LICENSE file in the root directory of this source tree.
 
 ----------
 
-Script to prepare recipe to train/eval model on VIVOS in wav2letter++ pipelines
+Script to prepare recipe to train/eval model on OLLI in wav2letter++ pipelines
 
 Command : python3 prepare.py --data_dst [...] --model_dst [...] --wp 10000 --nbest 10
 
@@ -25,9 +25,9 @@ import sentencepiece as spm
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="VIVOS Dataset creation.")
+    parser = argparse.ArgumentParser(description="OLLI Dataset creation.")
     parser.add_argument(
-        "--data_dst", help="data destination directory", default="./vivos"
+        "--data_dst", help="data destination directory", default="./olli"
     )
     parser.add_argument(
         "--model_dst",
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     os.system(
-        "python3 {}/../../data/vivos/prepare.py --dst {} -p {}".format(
+        "python3 {}/../../data/olli/prepare.py --dst {} -p {}".format(
             os.path.dirname(os.path.abspath(__file__)), args.data_dst, args.process
         )
     )
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # Generating am/*
     num_wordpieces = args.wp
     train_all_text = os.path.join(am_path, "train.txt")
-    prefix = "vivos-train-all-unigram-{}".format(num_wordpieces)
+    prefix = "olli-train-all-unigram-{}".format(num_wordpieces)
     prefix = os.path.join(am_path, prefix)
     vocab_name = prefix + ".vocab"
     model_name = prefix + ".model"
@@ -137,10 +137,10 @@ if __name__ == "__main__":
 
     for nbest in args.nbest.split(","):
         nbest = int(nbest)
-        lexicon_name = "vivos-train+dev-unigram-{sz}-nbest{n}.lexicon".format(
+        lexicon_name = "olli-train+dev-unigram-{sz}-nbest{n}.lexicon".format(
             sz=num_wordpieces, n=nbest
         )
-        lexicon_name_train = "vivos-train-unigram-{sz}-nbest{n}.lexicon".format(
+        lexicon_name_train = "olli-train-unigram-{sz}-nbest{n}.lexicon".format(
             sz=num_wordpieces, n=nbest
         )
         with open(os.path.join(am_path, lexicon_name), "w", encoding="utf-8") as f_lexicon, open(

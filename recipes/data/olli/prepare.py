@@ -57,6 +57,7 @@ if __name__ == '__main__':
                 utt_id, path = line.split(" ")
                 path_dict[utt_id] = path
         with open(os.path.join(dst_list), 'w', encoding="utf-8") as f:
+            counter = 0
             for t_line in text_lines:
                 wav_path = None
                 duration = None
@@ -65,6 +66,9 @@ if __name__ == '__main__':
                 wav_path = path_dict[utt_id][:-1]
                 duration = sox.file_info.duration(wav_path) * 1000
                 f.write("{} {} {} {}".format(utt_id, wav_path, duration, transcript))
+                counter += 1
+                if counter % 1000 == 0:
+                    print(f"Processed {counter} lines!")
 
     # Split train set to train+dev set
     train_lst_path = os.path.join(lists_path, 'train' + ".lst")
